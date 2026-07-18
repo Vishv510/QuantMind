@@ -1,0 +1,3 @@
+package com.stock.portfolio.messaging;
+import com.fasterxml.jackson.databind.ObjectMapper; import com.stock.portfolio.dto.StockPriceUpdateEvent; import com.stock.portfolio.service.PortfolioService; import org.springframework.kafka.annotation.KafkaListener; import org.springframework.stereotype.Component;
+@Component public class StockPriceUpdateConsumer { private final ObjectMapper mapper; private final PortfolioService service; public StockPriceUpdateConsumer(ObjectMapper m,PortfolioService s){mapper=m;service=s;} @KafkaListener(topics="${app.kafka.stock-price-topic}") public void consume(byte[] payload) throws Exception {StockPriceUpdateEvent e=mapper.readValue(payload,StockPriceUpdateEvent.class); service.updatePrices(e.symbol(),e.currentPrice());} }
