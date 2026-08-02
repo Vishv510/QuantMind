@@ -6,6 +6,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
+import java.util.Objects;
 
 @Component
 public class StockUpdateKafkaProducer {
@@ -23,6 +24,12 @@ public class StockUpdateKafkaProducer {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void publish(StockUpdateEvent event) {
-        kafkaTemplate.send(topic, event.symbol(), event);
+        Objects.requireNonNull(event, "event");
+        String symbol = Objects.requireNonNull(event.symbol(), "event.symbol");
+        kafkaTemplate.send(
+                Objects.requireNonNull(topic, "topic"),
+                symbol,
+                event
+        );
     }
 }

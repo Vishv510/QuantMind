@@ -50,7 +50,7 @@ public class AlertService {
         return AlertDto.from(repository.save(alert));
     }
 
-    public void deleteAlert(Long alertId, String userId) {
+    public void deleteAlert(long alertId, String userId) {
         Optional<Alert> existing = repository.findById(alertId);
         if (existing.isEmpty() || !userId.equals(existing.get().getUserId())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Alert not found");

@@ -12,6 +12,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -38,7 +40,9 @@ public class StockService {
             throw new StockAlreadyExistsException(symbol);
         }
         BigDecimal openingPrice = request.openingPrice().setScale(4, RoundingMode.HALF_UP);
-        return toResponse(stockRepository.save(Stock.create(symbol, request.companyName().trim(), openingPrice)));
+        return toResponse(Objects.requireNonNull(stockRepository.save(
+                Objects.requireNonNull(Stock.create(symbol, request.companyName().trim(), openingPrice))
+        )));
     }
 
     @Transactional(readOnly = true)
@@ -66,15 +70,15 @@ public class StockService {
     @Transactional
     @CacheEvict(cacheNames = "stocks", key = "#symbol.toUpperCase()")
     public void delete(String symbol) {
-        stockRepository.delete(findBySymbol(symbol));
+        stockRepository.delete(Objects.requireNonNull(findBySymbol(symbol)));
     }
 
     @Transactional
     @CacheEvict(cacheNames = "stocks", key = "#symbol.toUpperCase()")
     public void updatePrice(String symbol, BigDecimal newPrice) {
-        Stock stock = findBySymbol(symbol);
+        Stock stock = Objects.requireNonNull(findBySymbol(symbol));
         stock.updatePrice(newPrice.setScale(4, RoundingMode.HALF_UP));
-        eventPublisher.publishEvent(toEvent(stock));
+        eventPublisher.publishEvent(Objects.requireNonNull(toEvent(stock)));
     }
 
     private Stock findBySymbol(String symbol) {

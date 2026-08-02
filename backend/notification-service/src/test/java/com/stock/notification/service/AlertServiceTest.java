@@ -1,6 +1,7 @@
 package com.stock.notification.service;
 
 import com.stock.notification.dto.AlertDto;
+import com.stock.notification.dto.AlertNotification;
 import com.stock.notification.dto.CreateAlertRequest;
 import com.stock.notification.model.Alert;
 import com.stock.notification.model.AlertConditionType;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -34,10 +36,11 @@ class AlertServiceTest {
     private AlertService alertService;
 
     @Test
+    @SuppressWarnings("null")
     void shouldCreateAlertFromRequest() {
         CreateAlertRequest request = new CreateAlertRequest("user-1", "AAPL", "above", new BigDecimal("100"));
         when(repository.save(any(Alert.class))).thenAnswer(invocation -> {
-            Alert alert = invocation.getArgument(0);
+            Alert alert = invocation.getArgument(0, Alert.class);
             alert.setId(1L);
             return alert;
         });
@@ -50,6 +53,7 @@ class AlertServiceTest {
     }
 
     @Test
+    @SuppressWarnings("null")
     void shouldPushAlertWhenPriceMatchesCondition() {
         Alert alert = new Alert();
         alert.setId(1L);
@@ -65,6 +69,6 @@ class AlertServiceTest {
 
         alertService.evaluate(event);
 
-        verify(messagingTemplate).convertAndSend(any(String.class), any(Object.class));
+        verify(messagingTemplate).convertAndSend(eq("/topic/alerts/" + alert.getUserId()), any(AlertNotification.class));
     }
 }

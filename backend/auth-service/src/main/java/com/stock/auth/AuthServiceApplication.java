@@ -2,7 +2,6 @@ package com.stock.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 /**
  * Auth Service Application Entry Point
@@ -10,7 +9,6 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
  * Handles authentication and authorization for the real-time stock analytics system.
  */
 @SpringBootApplication
-@ConfigurationPropertiesScan
 public class AuthServiceApplication {
 
     public static void main(String[] args) {
