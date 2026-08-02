@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class StockServiceTest {
 
@@ -58,7 +57,6 @@ class StockServiceTest {
         assertEquals(new BigDecimal("5.5000"), event.changePercent());
     }
 
-    @SuppressWarnings("unchecked")
     private StockRepository repository(RepositoryInvocation invocation) {
         return (StockRepository) Proxy.newProxyInstance(
                 getClass().getClassLoader(),

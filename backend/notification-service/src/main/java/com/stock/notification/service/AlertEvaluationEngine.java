@@ -1,7 +1,6 @@
 package com.stock.notification.service;
 
 import com.stock.notification.model.Alert;
-import com.stock.notification.model.AlertConditionType;
 
 import java.math.BigDecimal;
 

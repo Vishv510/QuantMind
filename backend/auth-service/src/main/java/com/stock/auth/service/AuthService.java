@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
+import java.util.Objects;
 
 @Service
 public class AuthService {
@@ -42,6 +43,7 @@ public class AuthService {
     }
 
     @Transactional
+    @SuppressWarnings("null")
     public AuthResponse register(RegisterRequest request) {
         String username = normalize(request.username());
         String email = normalize(request.email());
@@ -53,10 +55,10 @@ public class AuthService {
             throw new DuplicateResourceException("Email is already in use");
         }
 
-        User user = userRepository.save(User.create(
+        User user = Objects.requireNonNull(userRepository.save(User.create(
                 username,
                 email,
-                passwordEncoder.encode(request.password())));
+                passwordEncoder.encode(request.password()))), "Failed to create user");
 
         return createAuthResponse(UserPrincipal.from(user));
     }

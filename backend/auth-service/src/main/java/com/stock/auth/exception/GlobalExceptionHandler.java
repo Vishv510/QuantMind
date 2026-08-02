@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponse> error(HttpStatus status, String code, String details) {
-        return ResponseEntity.status(status)
+        return ResponseEntity.status(status.value())
                 .body(new ErrorResponse(code, status.getReasonPhrase(), details, System.currentTimeMillis()));
     }
 }

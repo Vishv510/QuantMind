@@ -1,6 +1,5 @@
 package com.stock.common.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class ErrorResponse {
 
     private String errorCode;
@@ -21,5 +19,12 @@ public class ErrorResponse {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;
         this.timestamp = System.currentTimeMillis();
+    }
+
+    public ErrorResponse(String errorCode, String errorMessage, String details, long timestamp) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
+        this.details = details;
+        this.timestamp = timestamp;
     }
 }
